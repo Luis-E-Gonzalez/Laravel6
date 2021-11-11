@@ -1,0 +1,5 @@
+@extends('mipag')
+
+@section('sidebar')
+
+
