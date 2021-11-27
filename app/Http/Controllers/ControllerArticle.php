@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 use App\Article;
+use App\Category;
+use App\Images;
 use Illuminate\Http\Request;
 
 class ControllerArticle extends Controller
@@ -19,10 +21,17 @@ class ControllerArticle extends Controller
     public function index()
     {
 
-        $articles = Article::all();
+        $articles = Article::latest()->paginate(25);
         return view('articles.index',[
             'articles'=> $articles
             ]);
+
+    }
+
+    public function add()
+    {
+
+        return view('articles.add');
 
     }
 
@@ -35,8 +44,6 @@ class ControllerArticle extends Controller
      */
     public function store(Request $request)
     {
-        //
-
         Article::create([
         'title'=>$request->title,
         'img'=>$request->img,
@@ -45,12 +52,33 @@ class ControllerArticle extends Controller
         'category_id'=>$request->category_id,
         'img_id'=>$request->img_id
         ]);
-        return redirect('/category')->with('mesage', 'la categoria se ha agregado exitosamente!');
+        return redirect('/category')->with('mesage', 'El articulo fue publicado exitosamente');
+    }
+
+    public function create()
+    {
+        $article = new Article;
+        $categorias = Category::select('id', 'name')->orderBy('name')->get();
+        $imagenes = Images::select('id', 'name')->orderBy('name')->get();
+        return view('articles.add', compact('article', 'categorias', 'imagenes'));
     }
 
 
     public function delete(Article $article){
         $article->delete();
         return back();
+    }
+
+    public function show($id)
+    {
+        //obtines el article 
+        $article = Article::find($id);
+
+        return $article;
+
+        return view('article.show',[
+            '$articel' => $article
+        ]);
+
     }
 }

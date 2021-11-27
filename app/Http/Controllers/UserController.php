@@ -15,16 +15,18 @@ class UserController extends Controller
 /* metod index user */
     public function index(){
 
-        $users = User::all();
+        $users = User::latest()->paginate(25);
         return view('users.index',[
             'users' => $users
         ]);
         return back();
 
     }
+    
     public function store(){
 
     }
+
     /* metododo delete */
     public function delete(User $user){
 

@@ -3,7 +3,6 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Images;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Images extends Model

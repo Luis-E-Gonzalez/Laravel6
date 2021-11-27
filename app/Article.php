@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 /* Modelos a ocupar  */
 use App\Category;
 use App\Images;
+use \Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Article extends Model
 {
@@ -33,5 +34,21 @@ class Article extends Model
     public function Image(){
         return $this->hasMany('App\Images', 'foreign_key', 'img_id');
     }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+ 
+    public static function reglas() {
+        return [
+            'title' => 'required|max:255'
+            , 'img' => 'bail|nullable|max:150'
+            , 'subtitle' => 'required|max:150'
+            , 'body' => 'required|max:5000'
+            , 'category_id' => 'required|exists:categories,id'
+            , 'img_id' => 'required|exists:images,id'
+        ];
+     }
 
 }

@@ -18,7 +18,7 @@ class CategoryController extends Controller
         Select * from categories  */
     public function index(){
 
-        $categories = Category::all();
+        $categories = Category::latest()->paginate(25);
         return view('categories.index',[
         'categories'=> $categories
         ]);
@@ -31,7 +31,7 @@ class CategoryController extends Controller
 
             'name'=>$request->name
         ]);
-        return redirect('/category')->with('mesage', 'La categoria se ha agregado exitosamente!');
+        return redirect('/category')->with('mesage', 'La categoria se ha agregado exitosamente');
 
     }
     /* eliminacion de */
@@ -40,6 +40,13 @@ class CategoryController extends Controller
         $category->delete();
         return back();
 
+
+    }
+
+    public function edit($id){
+        $category = Category::findOrFaild($id);
+
+        return view('/category');
 
     }
 }

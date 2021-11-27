@@ -20,7 +20,7 @@
 Route::get('/users','UserController@index');
 /* store guarda datos en BD */
 Route::post('/users', 'UserController@store')->name('user.store');
-/* Delete elima datos */
+/* Delete elimina datos */
 Route::delete('/users/{user}' ,'UserController@delete')->name('user.destroy');
 
 /* Categorias */
@@ -28,12 +28,14 @@ Route::delete('/users/{user}' ,'UserController@delete')->name('user.destroy');
 Route::get('/category','CategoryController@index');
 Route::post('/categories','CategoryController@store')->name('category.store');
 Route::delete('/categories/{category}','CategoryController@delete')->name('category.destroy');
+Route::get('/categories/{$id}','CategoryController@edit')->name('category.edit');
 
 /* Articulos */
 
 Route::get('/articles','ControllerArticle@index');
 Route::post('/articles','ControllerArticle@store')->name('article.store');
 Route::delete('/articles/{article}','ControllerArticle@delete')->name('article.destroy');
+Route::get('/articles/add','ControllerArticle@add');
 
 
 /*  Images */
@@ -45,6 +47,20 @@ Auth::routes();
 Route::get('/', 'HomeController@index')->name('home');
 
 Auth::routes();
-
+Auth::routes(['verify' => true]);
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('enviar', ['as' => 'enviar', function () {
+
+    $data = ['link' => "http://styde.net"];
+
+    \Mail::send("emails.notificacion", $data, function ($message) {
+
+        $message->from("email@styde.net", "Styde.Net");
+
+        $message->to("user@example.com")->subject("Notificación");
+    });
+
+    return "Se envío el email";
+}]);
