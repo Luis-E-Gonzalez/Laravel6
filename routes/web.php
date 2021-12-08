@@ -20,23 +20,23 @@
 Route::get('/users','UserController@index');
 /* store guarda datos en BD */
 Route::post('/users', 'UserController@store')->name('user.store');
-/* Delete elimina datos */
+/* Delete elima datos */
 Route::delete('/users/{user}' ,'UserController@delete')->name('user.destroy');
 
 /* Categorias */
 
-Route::get('/category','CategoryController@index');
+Route::get('/categories','CategoryController@index');
 Route::post('/categories','CategoryController@store')->name('category.store');
+Route::put('/categories/{id}/update','CategoryController@update')->name('category.update');;
+Route::get('/categories/{id}/edit','CategoryController@edit');
 Route::delete('/categories/{category}','CategoryController@delete')->name('category.destroy');
-Route::get('/categories/{$id}','CategoryController@edit')->name('category.edit');
 
 /* Articulos */
 
 Route::get('/articles','ControllerArticle@index');
+Route::get('/article/add','ControllerArticle@create');
 Route::post('/articles','ControllerArticle@store')->name('article.store');
-Route::delete('/articles/{article}','ControllerArticle@delete')->name('article.destroy');
-Route::get('/articles/add','ControllerArticle@add');
-
+//Route::get('/articles/{$id}','ControllerArticle@show');
 
 /*  Images */
 
@@ -47,10 +47,11 @@ Auth::routes();
 Route::get('/', 'HomeController@index')->name('home');
 
 Auth::routes();
-Auth::routes(['verify' => true]);
+
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+/*  Email MailTrap */
 Route::get('enviar', ['as' => 'enviar', function () {
 
     $data = ['link' => "http://styde.net"];
@@ -64,3 +65,9 @@ Route::get('enviar', ['as' => 'enviar', function () {
 
     return "Se envío el email";
 }]);
+
+
+/* para verificar cuenta */
+Auth::routes(['verify' => true]);
+
+Auth::routes();

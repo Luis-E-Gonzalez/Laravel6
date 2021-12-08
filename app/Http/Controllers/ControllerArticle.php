@@ -3,16 +3,14 @@
 namespace App\Http\Controllers;
 use App\Article;
 use App\Category;
-use App\Images;
 use Illuminate\Http\Request;
 
 class ControllerArticle extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth','verified']);
     }
-
     /**
      * Display a listing of the resource.
      *
@@ -21,20 +19,24 @@ class ControllerArticle extends Controller
     public function index()
     {
 
-        $articles = Article::latest()->paginate(25);
+        $articles = Article::all();
         return view('articles.index',[
             'articles'=> $articles
             ]);
 
     }
 
-    public function add()
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
     {
-
-        return view('articles.add');
-
+        $categories = Category::all();
+        //return $categories;
+        return view('Articles.add', ["categories" => $categories]);
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -44,6 +46,8 @@ class ControllerArticle extends Controller
      */
     public function store(Request $request)
     {
+        //
+
         Article::create([
         'title'=>$request->title,
         'img'=>$request->img,
@@ -52,23 +56,15 @@ class ControllerArticle extends Controller
         'category_id'=>$request->category_id,
         'img_id'=>$request->img_id
         ]);
-        return redirect('/category')->with('mesage', 'El articulo fue publicado exitosamente');
+        return ('el article se dio de alta de manera correcta');
     }
 
-    public function create()
-    {
-        $article = new Article;
-        $categorias = Category::select('id', 'name')->orderBy('name')->get();
-        $imagenes = Images::select('id', 'name')->orderBy('name')->get();
-        return view('articles.add', compact('article', 'categorias', 'imagenes'));
-    }
-
-
-    public function delete(Article $article){
-        $article->delete();
-        return back();
-    }
-
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function show($id)
     {
         //obtines el article 
@@ -80,5 +76,39 @@ class ControllerArticle extends Controller
             '$articel' => $article
         ]);
 
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
     }
 }

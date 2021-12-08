@@ -10,17 +10,18 @@ class CategoryController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
-    }
+        $this->middleware(['auth','verified']);
+    } 
     use SoftDeletes;
     //
     /* vamos a obtener todas las categorua de nuestra base de datos ELOQUEN ORM
         Select * from categories  */
     public function index(){
-
-        $categories = Category::latest()->paginate(25);
+        /* cambiamos la consulta all por patest paginate para la apginacion de nuestros registros */
+        $categories = Category::latest()->paginate(20);
+        //return $categories;
         return view('categories.index',[
-        'categories'=> $categories
+        'categories'=> $categories,
         ]);
 
 
@@ -31,22 +32,38 @@ class CategoryController extends Controller
 
             'name'=>$request->name
         ]);
-        return redirect('/category')->with('mesage', 'La categoria se ha agregado exitosamente');
+        return redirect('/categories')->with('mesage', 'La categoria se ha agregado exitosamente');
 
     }
+
+    /* edit Category */
+        public function edit($id){
+            $category = Category::findOrFail($id);
+            //return $category;
+            return view('categories.edit',['category'=>$category]);
+
+        }
+        /* Update category */
+        public function update(Request $request, $id){
+          /*   $validateData = $request->validate([
+                'name' => 'required|max:5'
+            ]); */
+            $category = Category::findOrFail($id);
+
+            $category->update($request->all());
+       
+            //return back();
+
+            return redirect('/categories')->with('mesageUpdate', 'La categoria se ha modificado exitosamente');
+
+        }        
+
     /* eliminacion de */
     public function delete(Category $category){
 
         $category->delete();
-        return back();
+        return redirect('/categories')->with('mesageDelete', 'La categoria se ha eliminado exitosamente!');
 
-
-    }
-
-    public function edit($id){
-        $category = Category::findOrFaild($id);
-
-        return view('/category');
 
     }
 }
