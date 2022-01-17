@@ -28,7 +28,9 @@
                   <td>{{$user->email}}</td>
                   <td>
                     <button type='button' class="btn btn-primary"><i class="far fa-eye"></i></button>
-                    <button type='button' class="btn btn-success"><i class="fas fa-pen-square"></i></button>
+                    <a href="/users/{{$user->id}}/edit" class="btn btn-success"><i class="fas fa-pen-square"></i></a>
+                          {{-- <a class="btn btn-success" data-catid="{{$user->id}}">
+                            <i class="fas fa-pen-square"></i></a> --}}
                     <form action="{{ route('user.destroy', $user) }}" method="POST">
                       @method('DELETE')
                       @csrf
